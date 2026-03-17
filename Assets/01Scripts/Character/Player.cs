@@ -1,4 +1,3 @@
-using System.Runtime.Serialization.Formatters;
 using UnityEngine;
 
 public class Player : Character
@@ -56,7 +55,7 @@ public class Player : Character
 
         Camera_Mode current_Mode = Base_Manager.game_Mng.current_Mode;
 
-        float up_Value = 3.0f;
+        float run_Value = 3.0f;
 
         if (current_Mode == Camera_Mode.TPS || current_Mode == Camera_Mode.FPS)
         {
@@ -78,7 +77,7 @@ public class Player : Character
                 return base_Speed * side_Value;
 
             if (forward && isRun)
-                return base_Speed * up_Value;
+                return base_Speed * run_Value;
 
             if (forward)
                 return base_Speed;
@@ -87,7 +86,7 @@ public class Player : Character
         {
             if (isRun) 
             {
-                return base_Speed * up_Value;
+                return base_Speed * run_Value;
             }
             else
             {
@@ -113,7 +112,7 @@ public class Player : Character
     }
     private void Handle_TPS_Mode()
     {
-        TPS_Move();
+        TPS_FPS_Move();
     }
     private void Handle_RPG_Mode()
     {
@@ -136,29 +135,29 @@ public class Player : Character
         {
             move_Dir = _move_Dir;
 
-            float rotateSpeed = 10f;
-            Quaternion targetRot = Quaternion.LookRotation(_move_Dir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotateSpeed * Time.deltaTime);
+            float rotate_Speed = 10f;
+            Quaternion target_Rot = Quaternion.LookRotation(_move_Dir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, target_Rot, rotate_Speed * Time.deltaTime);
         }
         else
         {
             move_Dir = Vector3.zero;
         }
     }
-    private void TPS_Move()
+    private void TPS_FPS_Move()
     {
-        Vector3 inputDir = Get_Input_Dir();
+        Vector3 input_Dir = Get_Input_Dir();
 
-        Vector3 camForward = cam.forward;
-        Vector3 camRight = cam.right;
+        Vector3 cam_Forward = cam.forward;
+        Vector3 cam_Right = cam.right;
 
-        camForward.y = 0;
-        camRight.y = 0;
+        cam_Forward.y = 0;
+        cam_Right.y = 0;
 
-        camForward.Normalize();
-        camRight.Normalize();
+        cam_Forward.Normalize();
+        cam_Right.Normalize();
 
-        move_Dir = camForward * inputDir.z + camRight * inputDir.x;
+        move_Dir = cam_Forward * input_Dir.z + cam_Right * input_Dir.x;
 
         if (move_Dir.magnitude > 1)
             move_Dir.Normalize();

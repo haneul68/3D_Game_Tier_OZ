@@ -5,14 +5,14 @@ using UnityEngine;
 public class Stat
 {
     [SerializeField]
-    private float BaseValue;
+    private float Base_Value;
     private List<float> modifiers = new List<float>();
 
     public float Final_Value
     {
         get
         {
-            float final = BaseValue;
+            float final = Base_Value;
 
             foreach (var mod in modifiers)
             {
@@ -23,12 +23,12 @@ public class Stat
         }
     }
 
-    public void AddModifier(float value)
+    public void Add_Modifier(float value)
     {
         modifiers.Add(value);
     }
 
-    public void RemoveModifier(float value)
+    public void Remove_Modifier(float value)
     {
         modifiers.Remove(value);
     }

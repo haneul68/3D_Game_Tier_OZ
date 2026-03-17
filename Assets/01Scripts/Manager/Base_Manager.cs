@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class Base_Manager : MonoBehaviour
 {
     public static Base_Manager instance;

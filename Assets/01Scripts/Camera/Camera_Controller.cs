@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEditor.SceneView;
 
 public class Camera_Controller : MonoBehaviour
 {
@@ -80,8 +79,8 @@ public class Camera_Controller : MonoBehaviour
     #region CAMERA_SET
     private void Set_RPG_Camera()
     {
-        transform.localPosition = rpg_Offset; 
-        transform.localRotation = Quaternion.Euler(45f, 0f, 0f);
+        pivot.localPosition = rpg_Offset;
+        pivot.localRotation = Quaternion.Euler(45f, 0f, 0f);
         cam.SetParent(null, true);
     }
 
@@ -92,7 +91,7 @@ public class Camera_Controller : MonoBehaviour
         float mouse_X = Input.GetAxis("Mouse X") * mouse_Sensitivity * Time.deltaTime;
         float mouse_Y = Input.GetAxis("Mouse Y") * mouse_Sensitivity * Time.deltaTime;
 
-        transform.localPosition = new Vector3(0f, 1.7f, 0f);
+        pivot.localPosition = new Vector3(0f, 1.7f, 0f);
         cam.transform.localPosition = new Vector3(0f, 1f, -4f);
         cam.transform.localRotation = Quaternion.identity;
 
