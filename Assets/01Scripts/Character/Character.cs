@@ -1,6 +1,8 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
-public class Character : MonoBehaviour, IDamageable
+public class Character : MonoBehaviour, IDamageable, IAttacker
 {
     #region Jump
     protected float gravity = -9.81f;
@@ -12,22 +14,40 @@ public class Character : MonoBehaviour, IDamageable
     protected bool is_Jumping = false;
     #endregion
 
+    #region Attack
+    public bool is_Attacking { get; set; }
+    [SerializeField]
+    private Weapon current_Weapon; // 임시코드 
+    #endregion
+
     [SerializeField]
     protected Character_Stats stats = new Character_Stats();
 
-    protected Vector3 move_Dir;
+    public Character_Stats character_Stats => stats;
 
+    protected Vector3 move_Dir;
 
     protected Animator animator;
 
+    [SerializeField]
+    private UI_HP_Bar HP_Bar;
+
     protected Character_Animetion_State current_State;
 
+    public event Action<float, float> On_HP_Change_Event;
+
     public bool Is_Dead => stats.Get_Current_HP <= 0;
+
+    private void Awake()
+    {
+        HP_Bar.Set_Target(this);
+    }
 
     protected virtual void Start()
     {
         stats.Init();
         animator = GetComponent<Animator>();
+        On_HP_Change_Event?.Invoke(stats.Get_Current_HP,stats.Get_Max_HP);
     }
 
     protected virtual void Update()
@@ -63,6 +83,13 @@ public class Character : MonoBehaviour, IDamageable
                 return;
             case Character_Animetion_State.isAttack_3:
                 animator.SetTrigger(temp);
+                return;
+            case Character_Animetion_State.isDie:
+                animator.SetTrigger(temp);
+                return;
+            case Character_Animetion_State.isHit:
+                animator.SetTrigger(temp);
+                current_State = Character_Animetion_State.None;
                 return;
         }
 
@@ -104,7 +131,11 @@ public class Character : MonoBehaviour, IDamageable
     #region HP 관련
     public virtual void Heal(float amount)
     {
+        if(Is_Dead) return;
+
         stats.Heal_HP(amount);
+
+        Change_HP();
     }
 
     public virtual void Take_Damage(float damage)
@@ -113,22 +144,58 @@ public class Character : MonoBehaviour, IDamageable
 
         stats.Take_HP_Damage(damage);
 
+        if (!Is_Dead) 
+        {
+            Change_Animation(Character_Animetion_State.isHit);
+            is_Attacking = false;
+        }
+
+        Change_HP();
+
         if (Is_Dead)
         {
             Die();
         }
     }
+
+    private void Change_HP() 
+    {
+        float max_HP = stats.Get_Max_HP;
+        float current_HP = stats.Get_Current_HP;
+
+        On_HP_Change_Event?.Invoke(current_HP, max_HP);
+    }
+
     protected virtual void Die()
     {
         Debug.Log($"{name}가 죽었습니다.");
+        Change_Animation(Character_Animetion_State.isDie);
+        StartCoroutine(Destroy_Delay(2f));
+    }
+
+    private IEnumerator Destroy_Delay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         Destroy(gameObject);
     }
+
     #endregion
 
     #region Attack
     protected virtual void Attack() 
     {
-        
+        current_Weapon.Start_Attack(this);
+    }
+
+    public void On_Weapon_Collider() 
+    {
+        if (current_Weapon == null) return;
+        current_Weapon.On_Collider();
+    }
+    public void Off_Weapon_Collider()
+    {
+        if (current_Weapon == null) return;
+        current_Weapon.Off_Collider();
     }
     #endregion
 }

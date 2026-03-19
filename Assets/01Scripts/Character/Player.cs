@@ -13,8 +13,6 @@ public class Player : Character
     private bool input_run;
     [SerializeField]
     private bool input_Attack;
-    [SerializeField]
-    private bool is_Attacking;
 
     private Vector3 input_Dir;
     #endregion
@@ -25,6 +23,7 @@ public class Player : Character
     private Coroutine isAttack_Coroutine = null;
     [SerializeField]
     private Transform T_Combo_Effect_Position;
+
     #endregion
     protected override void Start()
     {
@@ -35,6 +34,8 @@ public class Player : Character
 
     protected override void Update()
     {
+        if(Is_Dead == true) return;
+
         Get_Input();
 
         Handle_Move_Mode();
@@ -46,6 +47,11 @@ public class Player : Character
         Handle_Attack();
 
         Move();
+
+        if (Input.GetKeyDown(KeyCode.B)) 
+        {
+            Take_Damage(10);
+        }
 
     }
     #region INPUT_SYSTEM
@@ -266,24 +272,78 @@ public class Player : Character
         }
     }
   
-    private void Handle_Attack() 
+    private void OnAnimatorMove()
+    {
+        if (is_Attacking)
+        {
+            controller.Move(animator.deltaPosition);
+        }
+    }
+    #endregion
+    #region Attack
+    public void Start_Attack_Combo_Timmer()
+    {
+        is_Attacking = false;
+        if (isAttack_Coroutine != null)
+        {
+            StopCoroutine(isAttack_Coroutine);
+            isAttack_Coroutine = null;
+        }
+        isAttack_Coroutine = StartCoroutine("Attack_Combo_Timmer");
+    }
+
+    public void End_Combo_Attack_Event()
+    {
+        Attack_Combo = 0;
+        is_Attacking = false;
+    }
+    private IEnumerator Attack_Combo_Timmer()
+    {
+        float default_Time = 2.0f;
+        float timmer = 0f;
+
+        while (default_Time >= timmer)
+        {
+            timmer += Time.deltaTime;
+            yield return null;
+        }
+        Attack_Combo = 0;
+        is_Attacking = false;
+    }
+
+    private void Succes_Combo()
+    {
+        Base_Manager.pool_Mng.Pooling_OBJ("3_Combo_Slash").Get(obj =>
+        {
+            float damage = stats.Get_Attack_Power;
+            obj.GetComponent<Projectiles>().Init(damage);
+            Vector3 pos = T_Combo_Effect_Position.position;
+            pos.y = 0f;
+            obj.transform.position = pos;
+            obj.transform.rotation = T_Combo_Effect_Position.rotation;
+        });
+    }
+
+    private void Handle_Attack()
     {
         if (is_Jumping == true) return;
 
-        if(is_Attacking == true) return;
+        if (is_Attacking == true) return;
 
-        if (input_Attack == true) 
+        if (input_Attack == true)
         {
             is_Attacking = true;
-           
-            switch (Attack_Combo) 
+
+            switch (Attack_Combo)
             {
                 case 0:
                     Change_Animation(Character_Animetion_State.isAttack_1);
+                    Attack();
                     Attack_Combo++;
                     break;
                 case 1:
                     Change_Animation(Character_Animetion_State.isAttack_2);
+                    Attack();
                     Attack_Combo++;
                     break;
                 case 2:
@@ -296,56 +356,6 @@ public class Player : Character
                 isAttack_Coroutine = null;
             }
         }
-    }
-    private void OnAnimatorMove()
-    {
-        if (is_Attacking)
-        {
-            controller.Move(animator.deltaPosition);
-        }
-    }
-
-    public void Start_Attack_Combo_Timmer() 
-    {
-        is_Attacking = false;
-        if (isAttack_Coroutine != null)
-        {
-            StopCoroutine(isAttack_Coroutine);
-            isAttack_Coroutine = null;
-        }
-        isAttack_Coroutine = StartCoroutine("Attack_Combo_Timmer");
-    }
-
-    public void End_Combo_Attack_Event() 
-    {
-        Attack_Combo = 0;
-        is_Attacking = false;
-    }
-    private IEnumerator Attack_Combo_Timmer() 
-    {
-        float default_Time = 2.0f;
-        float timmer = 0f;
-
-        while (default_Time >= timmer) 
-        {
-            timmer += Time.deltaTime;
-            yield return null;
-        }
-        Attack_Combo = 0;
-        is_Attacking = false;
-    }
-
-    private void Succes_Combo() 
-    {
-        Base_Manager.pool_Mng.Pooling_OBJ("3_Combo_Slash").Get(obj => 
-        {
-            float damage = stats.Get_Attack_Power;
-            obj.GetComponent<Projectiles>().Init(damage);
-            Vector3 pos = T_Combo_Effect_Position.position;
-            pos.y = 0f;
-            obj.transform.position = pos;
-            obj.transform.rotation = T_Combo_Effect_Position.rotation;
-        });
     }
     #endregion
 }
