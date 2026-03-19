@@ -17,7 +17,6 @@ public class Character : MonoBehaviour, IDamageable
 
     protected Vector3 move_Dir;
 
-    protected CharacterController controller;
 
     protected Animator animator;
 
@@ -28,13 +27,12 @@ public class Character : MonoBehaviour, IDamageable
     protected virtual void Start()
     {
         stats.Init();
-        controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
     }
 
-    protected virtual void FixedUpdate()
+    protected virtual void Update()
     {
-        Move();
+      
     }
     #region ANNIMETION
     public void Change_Animation(Character_Animetion_State new_State)
@@ -46,10 +44,8 @@ public class Character : MonoBehaviour, IDamageable
         }
         if (current_State == new_State) return;
 
-        if (!is_Grounded)
-            return;
-
         current_State = new_State;
+
         string temp = current_State.ToString();
 
         Reset_Anim_Bool();
@@ -57,6 +53,15 @@ public class Character : MonoBehaviour, IDamageable
         switch (current_State)
         {
             case Character_Animetion_State.isJump:
+                animator.SetTrigger(temp);
+                return;
+            case Character_Animetion_State.isAttack_1:
+                animator.SetTrigger(temp);
+                return;
+            case Character_Animetion_State.isAttack_2:
+                animator.SetTrigger(temp);
+                return;
+            case Character_Animetion_State.isAttack_3:
                 animator.SetTrigger(temp);
                 return;
         }
@@ -113,9 +118,17 @@ public class Character : MonoBehaviour, IDamageable
             Die();
         }
     }
-
     protected virtual void Die()
     {
+        Debug.Log($"{name}가 죽었습니다.");
+        Destroy(gameObject);
+    }
+    #endregion
+
+    #region Attack
+    protected virtual void Attack() 
+    {
+        
     }
     #endregion
 }

@@ -1,32 +1,52 @@
+using System.Collections;
 using UnityEngine;
 
 public class Player : Character
 {
     private Transform cam;
 
+    protected CharacterController controller;
+
     #region INPUT_VARIABLE
     private float input_H;
     private float input_V;
     private bool input_run;
+    [SerializeField]
+    private bool input_Attack;
+    [SerializeField]
+    private bool is_Attacking;
 
     private Vector3 input_Dir;
     #endregion
 
+    #region Attack
+    [SerializeField]
+    int Attack_Combo = 0;
+    private Coroutine isAttack_Coroutine = null;
+    [SerializeField]
+    private Transform T_Combo_Effect_Position;
+    #endregion
     protected override void Start()
     {
         base.Start();
         cam = Camera.main.transform;
+        controller = GetComponent<CharacterController>();
     }
 
-    void Update()
+    protected override void Update()
     {
         Get_Input();
 
         Handle_Move_Mode();
 
-        Handle_Animation(Get_Input_Dir(), input_run);
+        Handle_Animation_Move(Get_Input_Dir(), input_run);
 
         Handle_Jump();
+
+        Handle_Attack();
+
+        Move();
+
     }
     #region INPUT_SYSTEM
     private void Get_Input()
@@ -34,6 +54,7 @@ public class Player : Character
         input_H = Input.GetAxisRaw("Horizontal");
         input_V = Input.GetAxisRaw("Vertical");
         input_run = Input.GetKey(KeyCode.LeftShift);
+        input_Attack = Input.GetMouseButtonDown(0);
     }
     private void Handle_Jump()
     {
@@ -167,6 +188,8 @@ public class Player : Character
     #region Override
     protected override void Move()
     {
+        if(is_Attacking == true) return;
+
         float speed = Get_Move_Speed();
 
         is_Grounded = controller.isGrounded;
@@ -196,7 +219,7 @@ public class Player : Character
     #endregion
 
     #region ANIMATION
-    private void Handle_Animation(Vector3 move_Input, bool is_Running)
+    private void Handle_Animation_Move(Vector3 move_Input, bool is_Running)
     {
         if (move_Input.sqrMagnitude < 0.01f)
         {
@@ -241,6 +264,88 @@ public class Player : Character
         {
             Change_Animation(Character_Animetion_State.isWalk_R);
         }
+    }
+  
+    private void Handle_Attack() 
+    {
+        if (is_Jumping == true) return;
+
+        if(is_Attacking == true) return;
+
+        if (input_Attack == true) 
+        {
+            is_Attacking = true;
+           
+            switch (Attack_Combo) 
+            {
+                case 0:
+                    Change_Animation(Character_Animetion_State.isAttack_1);
+                    Attack_Combo++;
+                    break;
+                case 1:
+                    Change_Animation(Character_Animetion_State.isAttack_2);
+                    Attack_Combo++;
+                    break;
+                case 2:
+                    Change_Animation(Character_Animetion_State.isAttack_3);
+                    break;
+            }
+            if (isAttack_Coroutine != null)
+            {
+                StopCoroutine(isAttack_Coroutine);
+                isAttack_Coroutine = null;
+            }
+        }
+    }
+    private void OnAnimatorMove()
+    {
+        if (is_Attacking)
+        {
+            controller.Move(animator.deltaPosition);
+        }
+    }
+
+    public void Start_Attack_Combo_Timmer() 
+    {
+        is_Attacking = false;
+        if (isAttack_Coroutine != null)
+        {
+            StopCoroutine(isAttack_Coroutine);
+            isAttack_Coroutine = null;
+        }
+        isAttack_Coroutine = StartCoroutine("Attack_Combo_Timmer");
+    }
+
+    public void End_Combo_Attack_Event() 
+    {
+        Attack_Combo = 0;
+        is_Attacking = false;
+    }
+    private IEnumerator Attack_Combo_Timmer() 
+    {
+        float default_Time = 2.0f;
+        float timmer = 0f;
+
+        while (default_Time >= timmer) 
+        {
+            timmer += Time.deltaTime;
+            yield return null;
+        }
+        Attack_Combo = 0;
+        is_Attacking = false;
+    }
+
+    private void Succes_Combo() 
+    {
+        Base_Manager.pool_Mng.Pooling_OBJ("3_Combo_Slash").Get(obj => 
+        {
+            float damage = stats.Get_Attack_Power;
+            obj.GetComponent<Projectiles>().Init(damage);
+            Vector3 pos = T_Combo_Effect_Position.position;
+            pos.y = 0f;
+            obj.transform.position = pos;
+            obj.transform.rotation = T_Combo_Effect_Position.rotation;
+        });
     }
     #endregion
 }

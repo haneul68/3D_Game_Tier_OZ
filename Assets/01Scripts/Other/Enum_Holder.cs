@@ -9,7 +9,11 @@ public enum Character_Animetion_State
     isJump,
     isAttack,
     isHit,
-    isDie
+    isDie,
+    isAttack_1,
+    isAttack_2,
+    isAttack_3
+
 }
 
 public enum Camera_Mode 

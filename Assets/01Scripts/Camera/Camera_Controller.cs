@@ -10,9 +10,11 @@ public class Camera_Controller : MonoBehaviour
     Transform cam;
 
     [Header("마우스 감도")]
-    [Range(100,300)]
+    [Range(100, 300)]
     [SerializeField]
     private float mouse_Sensitivity = 150f;
+
+    Camera_Mode prev_Mode;
 
     float x_Rotation = 0f;
 
@@ -30,22 +32,24 @@ public class Camera_Controller : MonoBehaviour
     void Update()
     {
         Change_Mode();
+
+        if (prev_Mode != Base_Manager.game_Mng.current_Mode)
+        {
+            On_Mode_Changed_Camera_Set();
+            prev_Mode = Base_Manager.game_Mng.current_Mode;
+        }
     }
     void LateUpdate()
     {
-        if (Base_Manager.game_Mng.current_Mode == Camera_Mode.RPG && player != null)
-        {
-            cam.position = player.position + rpg_Offset;
-            cam.rotation = Quaternion.Euler(45f, 0f, 0f);
-        }
+        Set_Camera_Mode();
     }
     private void Change_Mode()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) 
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Base_Manager.game_Mng.current_Mode = Camera_Mode.TPS;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2)) 
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             Base_Manager.game_Mng.current_Mode = Camera_Mode.RPG;
         }
@@ -61,7 +65,25 @@ public class Camera_Controller : MonoBehaviour
         {
             Base_Manager.game_Mng.current_Mode = Camera_Mode.TPS;
         }
+    }
 
+    void On_Mode_Changed_Camera_Set()
+    {
+        switch (Base_Manager.game_Mng.current_Mode)
+        {
+            case Camera_Mode.TPS:
+                cam.SetParent(pivot, true);
+                break;
+            case Camera_Mode.FPS:
+                break;
+            case Camera_Mode.RPG:
+                cam.SetParent(null, true);
+                break;
+        }
+    }
+
+    private void Set_Camera_Mode()
+    {
         switch (Base_Manager.game_Mng.current_Mode)
         {
             case Camera_Mode.TPS:
@@ -79,15 +101,16 @@ public class Camera_Controller : MonoBehaviour
     #region CAMERA_SET
     private void Set_RPG_Camera()
     {
+        if (player == null) return;
+
         pivot.localPosition = rpg_Offset;
-        pivot.localRotation = Quaternion.Euler(45f, 0f, 0f);
-        cam.SetParent(null, true);
+
+        cam.position = player.position + rpg_Offset;
+        cam.rotation = Quaternion.Euler(45f, 0f, 0f);
     }
 
     private void Set_TPS_Camera()
     {
-        cam.SetParent(pivot, true);
-
         float mouse_X = Input.GetAxis("Mouse X") * mouse_Sensitivity * Time.deltaTime;
         float mouse_Y = Input.GetAxis("Mouse Y") * mouse_Sensitivity * Time.deltaTime;
 
@@ -105,8 +128,6 @@ public class Camera_Controller : MonoBehaviour
 
     private void Set_FPS_Camera()
     {
-        cam.SetParent(pivot, true);
-
         cam.localPosition = fps_Position;
         cam.localRotation = Quaternion.identity;
 

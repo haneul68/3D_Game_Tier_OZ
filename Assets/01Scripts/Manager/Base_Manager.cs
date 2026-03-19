@@ -4,8 +4,10 @@ public class Base_Manager : MonoBehaviour
     public static Base_Manager instance;
 
     private static Game_Manager game_Manager = new Game_Manager();
+    private static Pool_Manager pool_Manager = new Pool_Manager();
 
     public static Game_Manager game_Mng { get { return game_Manager; } }
+    public static Pool_Manager pool_Mng { get { return pool_Manager; } }
 
     private void Awake()
     {
@@ -29,5 +31,11 @@ public class Base_Manager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public GameObject Get_Prefab_OBJ(string path) 
+    {
+        GameObject go = Instantiate(Resources.Load<GameObject>(path));
+        return go;
     }
 }
