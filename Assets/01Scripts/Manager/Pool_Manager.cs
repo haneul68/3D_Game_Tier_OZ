@@ -41,6 +41,10 @@ public class Pool_Manager
 {
     public Dictionary<string, IPool> pool_Dictionary = new Dictionary<string, IPool>();
     Transform base_Parents;
+    public void Init(Transform T)
+    {
+        base_Parents = T;
+    }
     public IPool Pooling_OBJ(string path)
     {
         if (pool_Dictionary.ContainsKey(path) == false) 

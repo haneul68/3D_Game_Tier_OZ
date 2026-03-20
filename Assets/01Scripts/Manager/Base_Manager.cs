@@ -21,6 +21,8 @@ public class Base_Manager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        pool_Mng.Init(this.transform);
     }
 
     void Start()

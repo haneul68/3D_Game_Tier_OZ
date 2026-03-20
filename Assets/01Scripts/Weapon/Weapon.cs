@@ -17,7 +17,7 @@ public class Weapon : Item_Base
     [SerializeField]
     private BoxCollider attack_Collider = null;
 
-    private HashSet<IDamageable> hit_Targets = new HashSet<IDamageable>();
+    private List<IDamageable> hit_Targets = new List<IDamageable>();
 
     private IAttacker attacker;
     public void Start_Attack(IAttacker _attackr) 
@@ -65,6 +65,5 @@ public class Weapon : Item_Base
         }
 
         hit_Targets.Add(target);
-
     }
 }
