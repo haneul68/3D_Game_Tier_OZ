@@ -42,3 +42,14 @@ public enum Orb_Type
     Stamina,
     Mana
 }
+
+public enum Totem_Type 
+{
+    Heal,
+    Damage
+}
+public enum Zone_Type
+{
+    Heal,
+    Damage
+}

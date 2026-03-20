@@ -11,6 +11,7 @@ public class Goblin : Enemy_Base
             obj.transform.position = pos;
         });
 
+        
         base.Die();
     }
 }

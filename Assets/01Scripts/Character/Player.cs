@@ -289,7 +289,7 @@ public class Player : Character
             StopCoroutine(isAttack_Coroutine);
             isAttack_Coroutine = null;
         }
-        isAttack_Coroutine = StartCoroutine("Attack_Combo_Timmer");
+        isAttack_Coroutine = StartCoroutine(Attack_Combo_Timmer());
     }
 
     public void End_Combo_Attack_Event()

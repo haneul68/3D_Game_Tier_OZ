@@ -23,19 +23,24 @@ public class Character : MonoBehaviour, IDamageable, IAttacker
     [SerializeField]
     protected Character_Stats stats = new Character_Stats();
 
-    public Character_Stats character_Stats => stats;
-
     protected Vector3 move_Dir;
-
+    #region State
     protected Animator animator;
-
-    [SerializeField]
-    private UI_HP_Bar HP_Bar;
+    public Character_Stats character_Stats => stats;
 
     protected Character_Animetion_State current_State;
 
-    public event Action<float, float> On_HP_Change_Event;
+    public bool is_Fight = false;
+    private Coroutine fight_Coroutine;
+    [SerializeField]
+    private float fight_Duration;
+    #endregion
+    #region HP_UI
+    [SerializeField]
+    public UI_HP_Bar HP_Bar;
 
+    public event Action<float, float> On_HP_Change_Event;
+    #endregion
     public bool Is_Dead => stats.Get_Current_HP <= 0;
 
     private void Awake()
@@ -142,6 +147,8 @@ public class Character : MonoBehaviour, IDamageable, IAttacker
     {
         if (Is_Dead) return;
 
+        Start_Fight();
+
         stats.Take_HP_Damage(damage);
 
         if (!Is_Dead) 
@@ -184,6 +191,7 @@ public class Character : MonoBehaviour, IDamageable, IAttacker
     #region Attack
     protected virtual void Attack() 
     {
+        Start_Fight();
         current_Weapon.Start_Attack(this);
     }
 
@@ -198,4 +206,31 @@ public class Character : MonoBehaviour, IDamageable, IAttacker
         current_Weapon.Off_Collider();
     }
     #endregion
+
+    public void Start_Fight()
+    {
+        is_Fight = true;
+
+        if (fight_Coroutine != null) 
+        {
+            StopCoroutine(fight_Coroutine);
+            fight_Coroutine = null;
+        }
+        
+        fight_Coroutine = StartCoroutine(Fight_Cooldown());
+    }
+
+    private IEnumerator Fight_Cooldown()
+    {
+        float timer = 0f;
+
+        while (timer < fight_Duration)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        is_Fight = false;
+        fight_Coroutine = null;
+    }
 }
