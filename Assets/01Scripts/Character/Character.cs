@@ -71,44 +71,60 @@ public class Character : MonoBehaviour, IDamageable, IAttacker
 
         current_State = new_State;
 
-        string temp = current_State.ToString();
-
         Reset_Anim_Bool();
 
         switch (current_State)
         {
             case Character_Animetion_State.isJump:
-                animator.SetTrigger(temp);
+                animator.SetTrigger(AnimatorHash.isJump);
                 return;
             case Character_Animetion_State.isAttack_1:
-                animator.SetTrigger(temp);
+                animator.SetTrigger(AnimatorHash.isAttack1);
                 return;
             case Character_Animetion_State.isAttack_2:
-                animator.SetTrigger(temp);
+                animator.SetTrigger(AnimatorHash.isAttack2);
                 return;
             case Character_Animetion_State.isAttack_3:
-                animator.SetTrigger(temp);
+                animator.SetTrigger(AnimatorHash.isAttack3);
                 return;
             case Character_Animetion_State.isDie:
-                animator.SetTrigger(temp);
+                animator.SetTrigger(AnimatorHash.isDie);
                 return;
             case Character_Animetion_State.isHit:
-                animator.SetTrigger(temp);
+                animator.SetTrigger(AnimatorHash.isHit);
                 current_State = Character_Animetion_State.None;
                 return;
-        }
 
-        animator.SetBool(temp, true);
+
+            case Character_Animetion_State.isIdle:
+                animator.SetBool(AnimatorHash.isIdle, true);
+                return;
+            case Character_Animetion_State.isWalk_F:
+                animator.SetBool(AnimatorHash.isWalk_F, true);
+                return;
+            case Character_Animetion_State.isWalk_L:
+                animator.SetBool(AnimatorHash.isWalk_L, true);
+                return;
+            case Character_Animetion_State.isWalk_R:
+                animator.SetBool(AnimatorHash.isWalk_R, true);
+                return;
+            case Character_Animetion_State.isWalk_B:
+                animator.SetBool(AnimatorHash.isWalk_B, true);
+                return;
+            case Character_Animetion_State.isRun:
+                animator.SetBool(AnimatorHash.isRun, true);
+                return;
+        }
     }
 
     void Reset_Anim_Bool()
     {
-        animator.SetBool("isIdle", false);
-        animator.SetBool("isWalk_F", false);
-        animator.SetBool("isWalk_L", false);
-        animator.SetBool("isWalk_R", false);
-        animator.SetBool("isWalk_B", false);
-        animator.SetBool("isRun", false);
+        animator.SetBool(AnimatorHash.isIdle, false);
+        animator.SetBool(AnimatorHash.isWalk_F, false);
+        animator.SetBool(AnimatorHash.isWalk_L, false);
+        animator.SetBool(AnimatorHash.isWalk_R, false);
+        animator.SetBool(AnimatorHash.isWalk_B, false);
+        animator.SetBool(AnimatorHash.isRun, false);
     }
     #endregion
 
