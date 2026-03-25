@@ -15,7 +15,7 @@ public class UI_Inventory : UI_Base
     [SerializeField]
     private Transform content;
 
-    private Item_Type current_Type;
+    private Item_Type current_Type = Item_Type.None;
     [SerializeField]
     private Button[] item_Type_Buttons = new Button[3];
     private Vector2[] origin_Pos;
@@ -111,6 +111,10 @@ public class UI_Inventory : UI_Base
 
     private void Set_Item_Button_Type(Item_Type type) 
     {
+        if(current_Type == type) 
+        {
+            return;
+        }
         current_Type = type;
         Set_Inventory_Slot();
 
