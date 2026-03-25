@@ -46,7 +46,7 @@ public class Action_Slot_Panel : MonoBehaviour
         Close_Panel();
     }
 
-    private void Close_Panel()
+    public void Close_Panel()
     {
         Base_Manager.pool_Mng.pool_Dictionary["Item_Action_Panel"].Return(this.gameObject);
         Base_Manager.inventory_Mng.Acrtion_Panal_Holder.Clear();

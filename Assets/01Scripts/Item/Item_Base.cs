@@ -15,17 +15,13 @@ public class Item_Base : MonoBehaviour
 
     public virtual void Use_Item(int value) 
     {
-        if (Base_Manager.data_Mng.p_Item_Holder[item_Data.item_Name].holder.Quantity < value) 
+        if (!Base_Manager.inventory_Mng.Consume_Item(item_Data.item_Name, value))
         {
             Debug.Log("사용 불가능");
             return;
         }
 
-        Base_Manager.data_Mng.p_Item_Holder[item_Data.item_Name].holder.Quantity -= value;
-        Debug.Log($"남은 개수 {Base_Manager.data_Mng.p_Item_Holder[item_Data.item_Name].holder.Quantity}");
-        if (Base_Manager.data_Mng.p_Item_Holder[item_Data.item_Name].holder.Quantity == 0) 
-        {
-            Base_Manager.inventory_Mng.usable_Item.Remove(item_Data.item_Name);
-        }
+        int temp = Base_Manager.inventory_Mng.Get_Item_Count(item_Data.item_Name);
+        Debug.Log($"남은 개수 : {temp}");
     }
 }

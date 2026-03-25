@@ -44,7 +44,7 @@ public class UI_Inventory : UI_Base
 
     void Update()
     {
-        
+
     }
 
     public void Expand_Inventory()
@@ -54,11 +54,11 @@ public class UI_Inventory : UI_Base
         Set_Inventory_Slot();
     }
 
-    private void Set_Inventory_Slot() 
+    private void Set_Inventory_Slot()
     {
-        if (garvage_Slot.Count >=0)
+        if (garvage_Slot.Count >= 0)
         {
-            for (int i = 0; i < garvage_Slot.Count; i++) 
+            for (int i = 0; i < garvage_Slot.Count; i++)
             {
                 Destroy(garvage_Slot[i]);
             }
@@ -74,10 +74,10 @@ public class UI_Inventory : UI_Base
             }
         }
 
-        int size = Get_Size(); 
+        int size = Get_Size();
         int index = 0;
 
-        for (int i = 0; i < size; i++) 
+        for (int i = 0; i < size; i++)
         {
             Inventory_Item_Slot slot = Instantiate(slot_Prefab, content);
             garvage_Slot.Add(slot.gameObject);
@@ -94,13 +94,17 @@ public class UI_Inventory : UI_Base
             }
         }
         Button button = Instantiate(expand_Slot_Button, content);
-        button.onClick.RemoveAllListeners();    
-        button.onClick.AddListener(Expand_Inventory);
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(()=> 
+        { 
+            Expand_Inventory();
+            Close_PopUp();
+        });
         button.gameObject.SetActive(true);
         garvage_Slot.Add(button.gameObject);
     }
 
-    private int Get_Size() 
+    private int Get_Size()
     {
         int size = 11;
         int index = (int)current_Type;
@@ -109,16 +113,18 @@ public class UI_Inventory : UI_Base
         return size * current_Size;
     }
 
-    private void Set_Item_Button_Type(Item_Type type) 
+    private void Set_Item_Button_Type(Item_Type type)
     {
-        if(current_Type == type) 
+        if (current_Type == type)
         {
             return;
         }
         current_Type = type;
         Set_Inventory_Slot();
 
-        if (select_Coroutine != null) 
+        Close_PopUp();
+
+        if (select_Coroutine != null)
         {
             StopCoroutine(select_Coroutine);
             select_Coroutine = null;
@@ -128,7 +134,7 @@ public class UI_Inventory : UI_Base
     }
 
     public override void Close_UI()
-    {   
+    {
         Base_Manager.inventory_Mng.Acrtion_Panal_Holder.Clear();
         base.Close_UI();
     }
@@ -170,4 +176,13 @@ public class UI_Inventory : UI_Base
         rect.anchoredPosition = endPos;
         rect.localScale = endScale;
     }
-}
+
+    private void Close_PopUp() 
+    {
+        if (Base_Manager.inventory_Mng.Acrtion_Panal_Holder.Count > 0)
+        {
+            GameObject obj = Base_Manager.inventory_Mng.Acrtion_Panal_Holder.Pop();
+            obj.GetComponent<Action_Slot_Panel>().Close_Panel();
+        }
+    }
+} 
