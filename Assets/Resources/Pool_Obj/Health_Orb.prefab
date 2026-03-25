@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4187b193fbd52b49821317e215b0d6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item_ID: potion_hp
+  item_ID: orb_hp
   item_Name: Health_Orb
   item_Description: "\uCCB4\uB825 \uD68C\uBCF5 \uAD6C\uC2AC"
   amount: 1

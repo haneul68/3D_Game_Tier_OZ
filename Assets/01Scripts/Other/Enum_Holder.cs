@@ -31,9 +31,10 @@ public enum Weapon_Type
 }
 public enum Item_Type
 {
-    None,
+    Weapon,
     Consumable,
-    Weapon
+    Material,
+    None
 }
 
 public enum Orb_Type 
@@ -52,4 +53,16 @@ public enum Zone_Type
 {
     Heal,
     Damage
+}
+
+public enum World_Item_Type
+{
+    Health,
+    Stamina,
+    Mana
+}
+
+public enum UI_Type 
+{
+
 }

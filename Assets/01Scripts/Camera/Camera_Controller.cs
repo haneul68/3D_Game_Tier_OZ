@@ -26,11 +26,13 @@ public class Camera_Controller : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        Base_Manager.game_Mng.current_Mode = Camera_Mode.TPS;
+       
     }
 
     void Update()
     {
+        if (Cursor.lockState != CursorLockMode.Locked) return;
+
         Change_Mode();
 
         if (prev_Mode != Base_Manager.game_Mng.current_Mode)
@@ -41,19 +43,12 @@ public class Camera_Controller : MonoBehaviour
     }
     void LateUpdate()
     {
+        if (Cursor.lockState != CursorLockMode.Locked) return;
         Set_Camera_Mode();
     }
+
     private void Change_Mode()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            Base_Manager.game_Mng.current_Mode = Camera_Mode.TPS;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            Base_Manager.game_Mng.current_Mode = Camera_Mode.RPG;
-        }
-
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
         if (Base_Manager.game_Mng.current_Mode == Camera_Mode.TPS && scroll > 0f)

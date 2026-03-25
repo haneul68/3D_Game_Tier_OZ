@@ -14738,7 +14738,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38c7a2bfab4fd2d4da9e0dab5124f8c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
+  name: Heal_Effect
   delay: 1.5
 --- !u!1 &5329532922404175182
 GameObject:

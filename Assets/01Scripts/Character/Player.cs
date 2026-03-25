@@ -34,7 +34,9 @@ public class Player : Character
 
     protected override void Update()
     {
-        if(Is_Dead == true) return;
+        if (Cursor.lockState != CursorLockMode.Locked) return;
+
+        if (Is_Dead == true) return;
 
         Get_Input();
 

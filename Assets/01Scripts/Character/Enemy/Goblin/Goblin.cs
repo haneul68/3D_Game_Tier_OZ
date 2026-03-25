@@ -6,9 +6,7 @@ public class Goblin : Enemy_Base
     {
         Base_Manager.pool_Mng.Pooling_OBJ("Health_Orb").Get(obj =>
         {
-            Vector3 pos = transform.position;
-            pos.y = 1.0f;
-            obj.transform.position = pos;
+            obj.GetComponent<Item_Base>().Init(transform.position, Base_Manager.data_Mng.d_Item_Data["Health_Orb"]);
         });
 
         

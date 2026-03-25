@@ -12,7 +12,7 @@ public class Pickup_Item : Item_Base
         if (other.TryGetComponent<Player>(out var player))
         {
             Check_Item_Type(player);
-            Base_Manager.pool_Mng.pool_Dictionary[item_Name].Return(this.gameObject);
+            Base_Manager.pool_Mng.pool_Dictionary[item_Data.item_Name].Return(this.gameObject);
         }
     }
     private void Check_Item_Type(Player player) 
