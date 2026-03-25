@@ -391,7 +391,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 377, y: 347}
-  m_SizeDelta: {x: 171.9056, y: 113.5544}
+  m_SizeDelta: {x: 171, y: 113}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7216350524504051425
 CanvasRenderer:
@@ -5352,7 +5352,7 @@ MonoBehaviour:
   slot_Prefab: {fileID: 6908432015368881942}
   expand_Slot_Button: {fileID: 3828208071429277971}
   content: {fileID: 6926700230464668644}
-  item_Type_ButtonS:
+  item_Type_Buttons:
   - {fileID: 6252317427634310700}
   - {fileID: 9082001650477201599}
   - {fileID: 1754028733275039053}
@@ -5892,7 +5892,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 377, y: 106.00006}
-  m_SizeDelta: {x: 171.9056, y: 113.5544}
+  m_SizeDelta: {x: 171, y: 113}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2682729968034323948
 CanvasRenderer:
@@ -9133,7 +9133,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 377, y: 226.90005}
-  m_SizeDelta: {x: 171.91, y: 113.5544}
+  m_SizeDelta: {x: 171, y: 113}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5164296892544306713
 CanvasRenderer:
