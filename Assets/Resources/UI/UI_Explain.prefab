@@ -425,8 +425,8 @@ MonoBehaviour:
     : WSAD\n\uB2EC\uB9AC\uAE30 : SHIFT\n\uC810\uD504 : SPACE_BAR\n\uACF5\uACA9 :
     \uB9C8\uC6B0\uC2A4 \uC88C\uD074\uB9AD \n- 1\uD68C : \uAE30\uBCF8 \uACF5\uACA9\n-
     2\uD68C : \uC5F0\uC18D \uACF5\uACA9\n- 3\uD68C : \uC5F0\uC18D \uACF5\uACA9 (\uCC38\uACA9)\n\uC0C1\uD638\uC791\uC6A9
-    : F\n\uD50C\uB808\uC774\uC5B4 \uB370\uBBF8\uC9C0 : B (\uD14C\uC2A4\uD2B8\uC6A9)\n\n<color=#0FF0F0><\uBAA8\uB4DC\uBCC0\uACBD></color>\nKey
-    1 : TPS \nKey 2 : RPG \n\n<color=#FF00F0><TPS \uC0C1\uD0DC\uC5D0\uC11C></color>\n\uB9C8\uC6B0\uC2A4
+    : F\n\uD50C\uB808\uC774\uC5B4 \uB370\uBBF8\uC9C0 : B (\uD14C\uC2A4\uD2B8\uC6A9)\n\uC778\uBCA4\uD1A0\uB9AC
+    : I\n\n<color=#FF00F0><TPS \uC0C1\uD0DC\uC5D0\uC11C></color>\n\uB9C8\uC6B0\uC2A4
     \uD720 \uC704\uB85C : FPS\n\uB9C8\uC6B0\uC2A4 \uD720 \uC544\uB798\uB85C :TPS\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c0b1379eeda944e4b83b9ad76116c8a1, type: 2}
