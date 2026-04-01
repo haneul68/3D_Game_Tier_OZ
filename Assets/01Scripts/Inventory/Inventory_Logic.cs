@@ -12,29 +12,26 @@ public class Inventory_Logic
         inventory_Data = data;
     }
 
-    public void Try_Get_Item(Item_Scriptable item, int amount)
-    {
-        string itemID = item.item_ID;
-        var currentQuantity = inventory_Data.Get_Quantity(itemID);
-        int maxStack = Mathf.Max(1, item.max_Stack);
+    //public void Try_Get_Item(Item_Scriptable item, int amount)
+    //{
+    //    string itemID = item.item_ID;
+    //    var currentQuantity = inventory_Data.Get_Quantity(itemID);
+    //    int maxStack = Mathf.Max(1, item.max_Stack);
 
-        // 현재 슬롯 개수
-        int slotIndex = (int)item.item_Type;
-        int currentSlots = Base_Manager.inventory_Mng.Inventory_Size[slotIndex];
+    //    int slotIndex = (int)item.item_Type;
+    //    int currentSlots = Base_Manager.inventory_Mng.Inventory_Size[slotIndex];
 
-        // 현재 슬롯에서 수용 가능한 최대 아이템 수 계산
-        int maxCapacity = currentSlots * maxStack;
-        int addableAmount = Mathf.Min(amount, maxCapacity - currentQuantity);
+    //    int maxCapacity = currentSlots * maxStack;
+    //    int addableAmount = Mathf.Min(amount, maxCapacity - currentQuantity);
 
-        if (addableAmount <= 0)
-        {
-            Debug.Log("슬롯 가득 참. 더 이상 획득 불가.");
-            return;
-        }
+    //    if (addableAmount <= 0)
+    //    {
+    //        return;
+    //    }
 
-        inventory_Data.Add_Quantity(item.item_ID, amount);
-        OnItemChanged?.Invoke(inventory_Data.Player_Items[item.item_ID]);
-    }
+    //    inventory_Data.Add_Quantity(item.item_ID, amount);
+    //    OnItemChanged?.Invoke(inventory_Data.Player_Items[item.item_ID]);
+    //}
     public bool Get_Item(Item_Scriptable item, int amount)
     {
         int slot_Index = (int)item.item_Type;
@@ -43,7 +40,7 @@ public class Inventory_Logic
         int current_Quantity = inventory_Data.Get_Quantity(item.item_ID);
         int max_Stack = item.max_Stack;
 
-        int currentItemSlots = Mathf.CeilToInt((float)current_Quantity / max_Stack);
+        int current_Item_Slots = Mathf.CeilToInt((float)current_Quantity / max_Stack);
 
         int current_Use_Slot = 0;
         foreach (var kvp in inventory_Data.Player_Items)
@@ -60,7 +57,7 @@ public class Inventory_Logic
         int total_Quantity_After = current_Quantity + amount;
         int slotsNeededForItem = Mathf.CeilToInt((float)total_Quantity_After / max_Stack);
 
-        int additional_Slots_Needed = slotsNeededForItem;
+        int additional_Slots_Needed = slotsNeededForItem - current_Item_Slots;
 
         if (additional_Slots_Needed <= available_Slots)
         {

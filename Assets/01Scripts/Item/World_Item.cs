@@ -7,6 +7,14 @@ public class World_Item : Item_Base
 
     private void OnTriggerEnter(Collider other)
     {
+        bool success = Base_Manager.inventory_Mng.inventory_Logic.Get_Item(item_Data, 1);
+
+        if (!success)
+        {
+            Debug.Log($"인벤토리 슬롯 부족: {item_Data.item_Name}");
+            return; 
+        }
+
         if (other.TryGetComponent<Player>(out var player))
         {
             Base_Manager.pool_Mng.pool_Dictionary[item_Data.item_ID].Return(this.gameObject);
