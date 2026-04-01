@@ -4,12 +4,18 @@ public class Goblin : Enemy_Base
 {
     protected override void Die()
     {
-        Base_Manager.pool_Mng.Pooling_OBJ("Health_Orb").Get(obj =>
+        if (Base_Manager.data_Mng.Get_Item_Data("orb_health", out var item_Data))
         {
-            obj.GetComponent<Item_Base>().Init(transform.position, Base_Manager.data_Mng.d_Item_Data["Health_Orb"]);
-        });
+            Base_Manager.pool_Mng.Pooling_OBJ("orb_health").Get(obj =>
+            {
+                 obj.GetComponent<Item_Base>().Init(transform.position, item_Data);
+            });
+        }
+        else
+        {
+            Debug.LogError("아이템 데이터가 없습니다.");
+        }
 
-        
         base.Die();
     }
 }

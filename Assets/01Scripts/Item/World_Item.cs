@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class World_Item : Item_Base
 {
@@ -10,13 +9,13 @@ public class World_Item : Item_Base
     {
         if (other.TryGetComponent<Player>(out var player))
         {
-            Base_Manager.pool_Mng.pool_Dictionary[item_Data.item_Name].Return(this.gameObject);
-            Base_Manager.inventory_Mng.Get_Item(item_Data,1);
-            if (!Base_Manager.inventory_Mng.usable_Item.ContainsKey(item_Data.item_Name))
+            Base_Manager.pool_Mng.pool_Dictionary[item_Data.item_ID].Return(this.gameObject);
+            Base_Manager.inventory_Mng.inventory_Logic.Get_Item(item_Data,1);
+            if (!Base_Manager.inventory_Mng.inventory_Data.Has_Usable_Item(item_Data.item_ID))
             {
                 if (item_Data.item_Type == Item_Type.Consumable)
                 {
-                    Base_Manager.inventory_Mng.usable_Item.Add(item_Data.item_Name, this);
+                    Base_Manager.inventory_Mng.inventory_Data.Add_Usable_Item(item_Data.item_ID, this);
                 }
             }
         }

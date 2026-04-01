@@ -19,6 +19,7 @@ public class Player_Interaction : MonoBehaviour
             if (current_Interactable != null)
             {
                 current_Interactable.Interact(this);
+                current_Interactable = null;
             }
             else
             {

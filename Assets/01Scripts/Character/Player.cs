@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : Character
 {
@@ -25,6 +26,49 @@ public class Player : Character
     private Transform T_Combo_Effect_Position;
 
     #endregion
+
+    private static Player instance;
+    void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+        Init();
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (!string.IsNullOrEmpty(Scene_Data.spawn_Point_Name))
+        {
+            GameObject spawn = GameObject.Find(Scene_Data.spawn_Point_Name);
+
+            if (spawn != null)
+            {
+                CharacterController cc = GetComponent<CharacterController>();
+
+                if (cc != null) cc.enabled = false;
+
+                transform.position = spawn.transform.position;
+
+                if (cc != null) cc.enabled = true;
+            }
+        }
+    }
+
     protected override void Start()
     {
         base.Start();

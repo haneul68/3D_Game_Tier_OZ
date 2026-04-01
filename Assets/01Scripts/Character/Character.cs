@@ -36,14 +36,14 @@ public class Character : MonoBehaviour, IDamageable, IAttacker
     private float fight_Duration;
     #endregion
     #region HP_UI
-    [SerializeField]
+
     public UI_HP_Bar HP_Bar;
 
     public event Action<float, float> On_HP_Change_Event;
     #endregion
     public bool Is_Dead => stats.Get_Current_HP <= 0;
 
-    private void Awake()
+    protected virtual void Init() 
     {
         HP_Bar.Set_Target(this);
     }

@@ -35,25 +35,46 @@ public class Base_Manager : MonoBehaviour
         pool_Mng.Init(this.transform);
         ui_Mng.Init(base_Canvas);
         data_Mng.Init();
+        inventory_Mng.Init();
     }
 
     void Start()
     {
         // 테스트용 코드
-        pool_Mng.Pooling_OBJ("HP_Potion").Get(obj =>
+        if (data_Mng.Get_Item_Data("potion_health", out var item_Data))
         {
-            obj.GetComponent<Item_Base>().Init(new Vector3(2,0.2f,2), data_Mng.d_Item_Data["HP_Potion"]);
-        });
+            pool_Mng.Pooling_OBJ("potion_health").Get(obj =>
+            {
+                obj.GetComponent<Item_Base>().Init(new Vector3(2, 0.2f, 2), item_Data);
 
-        pool_Mng.Pooling_OBJ("HP_Potion").Get(obj =>
+            });
+            pool_Mng.Pooling_OBJ("potion_health").Get(obj =>
+            {
+                obj.GetComponent<Item_Base>().Init(new Vector3(-2, 0.2f, 2), item_Data);
+            });
+            pool_Mng.Pooling_OBJ("potion_health").Get(obj =>
+            {
+                obj.GetComponent<Item_Base>().Init(new Vector3(4, 0.2f, 2), item_Data);
+
+            });
+            pool_Mng.Pooling_OBJ("potion_health").Get(obj =>
+            {
+                obj.GetComponent<Item_Base>().Init(new Vector3(-4, 0.2f, 2), item_Data);
+            });
+           
+        }
+        if (data_Mng.Get_Item_Data("potion_purple", out var item_Data2)) 
         {
-            obj.GetComponent<Item_Base>().Init(new Vector3(-2, 0.2f, 2), data_Mng.d_Item_Data["HP_Potion"]);
-        });
-    }
-
-    void Update()
-    {
-        
+            pool_Mng.Pooling_OBJ("potion_purple").Get(obj =>
+            {
+                obj.GetComponent<Item_Base>().Init(new Vector3(-5, 0.2f, 2), item_Data2);
+            });
+            pool_Mng.Pooling_OBJ("potion_purple").Get(obj =>
+            {
+                obj.GetComponent<Item_Base>().Init(new Vector3(5, 0.2f, 2), item_Data2);
+            });
+        }
+       
     }
 
     public GameObject Get_Prefab_OBJ(string path) 

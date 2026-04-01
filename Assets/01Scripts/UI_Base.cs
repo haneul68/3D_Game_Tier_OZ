@@ -11,12 +11,6 @@ public class UI_Base : MonoBehaviour
     }
     public virtual void Close_UI()
     {
-        Base_Manager.ui_Mng.ui_Holder.Pop();
-        if (Base_Manager.ui_Mng.ui_Holder.Count == 0)
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-        Destroy(this.gameObject);
+        Base_Manager.ui_Mng.Close_Top_UI();
     }
 }

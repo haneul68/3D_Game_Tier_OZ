@@ -11,7 +11,6 @@ public class UI_HP_Bar : MonoBehaviour
     {
         if (target != null)
             target.On_HP_Change_Event -= Update_HP_Bar;
-
         target = character;
         target.On_HP_Change_Event += Update_HP_Bar;
 
@@ -19,6 +18,7 @@ public class UI_HP_Bar : MonoBehaviour
         {
             float currentHP = m_Character.character_Stats.Get_Current_HP;
             float maxHP = m_Character.character_Stats.Get_Max_HP;
+            currentHP = currentHP - 10;
             Update_HP_Bar(currentHP, maxHP);
         }
     }

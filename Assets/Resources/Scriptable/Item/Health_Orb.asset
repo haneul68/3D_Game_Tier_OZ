@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1672764bbb2ef8f4587c34a82b74ab53, type: 3}
   m_Name: Health_Orb
   m_EditorClassIdentifier: 
-  item_ID: orb
+  item_ID: orb_health
   item_Name: Health_Orb
   item_Description: "\uCCB4\uB825\uC744 <color=#00FF00>{0}</color> \uB9CC\uD07C \uD68C\uBCF5\uD569\uB2C8\uB2E4."
   is_Pickup: 1
+  item_Value: 0
   item_Type: 1

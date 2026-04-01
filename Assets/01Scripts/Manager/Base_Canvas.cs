@@ -2,8 +2,21 @@ using UnityEngine;
 
 public class Base_Canvas : MonoBehaviour
 {
+    private static Base_Canvas instance;
+
     [SerializeField]
     private Transform[] Layers;
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     private void Update()
     {

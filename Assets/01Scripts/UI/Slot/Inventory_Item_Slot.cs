@@ -12,13 +12,13 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
     Item_Scriptable data;
     RectTransform slot_Rect;
 
-   [SerializeField]
     private Transform content;
 
     private GameObject Popup;
-    private GameObject Action_Panal;
 
-    public void Init(Item_Holder item = null) 
+    public int item_stack = 0;
+
+    public void Init(Item_Holder item = null, Transform popup_Content = null) 
     {
         if (item == null)
         {
@@ -27,10 +27,16 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
             quantity_Text.text = "0";
             return;
         }
+
+        if (popup_Content != null) 
+        {
+            content = popup_Content;
+        }
+
         data = item.item_Data;
         Holder holder = item.holder;
         item_Image.gameObject.SetActive(true);
-        item_Image.sprite = Utils.Get_Atlas(data.item_Name);
+        item_Image.sprite = Utils.Get_Atlas(data.item_ID);
         item_Image.SetNativeSize();
         slot_Rect = item_Image.GetComponent<RectTransform>();
         slot_Rect.sizeDelta = new Vector2(slot_Rect.sizeDelta.x/4, slot_Rect.sizeDelta.y / 4);
@@ -53,7 +59,7 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
 
         if (Popup != null)
         {
-            Base_Manager.pool_Mng.pool_Dictionary["UI_Des"].Return(Popup);
+            Base_Manager.pool_Mng.pool_Dictionary[UI_Pool_Key.UI_DES_POPUP].Return(Popup);
             Popup = null;
         }
 
@@ -63,7 +69,7 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
             return;
         }
 
-        Base_Manager.pool_Mng.Pooling_OBJ("Item_Action_Panel").Get(obj =>
+        Base_Manager.pool_Mng.Pooling_OBJ(UI_Pool_Key.ITEM_ACTION_PANEL).Get(obj =>
         {
             obj.GetComponent<Action_Slot_Panel>().Init(data,this);   
             obj.transform.parent = content;
@@ -90,7 +96,7 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
             return;
         }
 
-        Base_Manager.pool_Mng.Pooling_OBJ("UI_Des").Get(obj => 
+        Base_Manager.pool_Mng.Pooling_OBJ(UI_Pool_Key.UI_DES_POPUP).Get(obj => 
         {
             obj.GetComponent<UI_Des_PopUp>().init(data);
             obj.transform.parent = content;
@@ -106,7 +112,7 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
     {
         if (Popup != null)
         {
-            Base_Manager.pool_Mng.pool_Dictionary["UI_Des"].Return(Popup);
+            Base_Manager.pool_Mng.pool_Dictionary[UI_Pool_Key.UI_DES_POPUP].Return(Popup);
             Popup = null;
         }
     }

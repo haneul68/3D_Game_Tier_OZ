@@ -14,9 +14,9 @@ public class Holder
 
 public class Data_Manager
 {
-    public Dictionary<string, Item_Scriptable> d_Item_Data = new Dictionary<string, Item_Scriptable>(); 
-    public Dictionary<string, Item_Holder> p_Item_Holder = new Dictionary<string, Item_Holder>();
-
+    private Dictionary<string, Item_Scriptable> d_Item_Data = new Dictionary<string, Item_Scriptable>();
+    public IReadOnlyDictionary<string, Item_Scriptable> Item_Data => d_Item_Data;
+    
     public void Init() 
     {
         Set_Item_Data();
@@ -31,22 +31,15 @@ public class Data_Manager
             var item = new Item_Scriptable();
             item = data;
 
-            if (!d_Item_Data.ContainsKey(data.name))
+            if (!d_Item_Data.ContainsKey(data.item_ID))
             {
-                d_Item_Data.Add(data.name, item);
-            }
-
-            if (!p_Item_Holder.ContainsKey(data.name))
-            {
-                Item_Holder itemHolder = new Item_Holder();
-                itemHolder.item_Data = data;
-                itemHolder.holder = new Holder();
-                p_Item_Holder.Add(data.name, itemHolder);
-            }
-            else
-            {
-                //TODO: 저장 되어있던 값 p_Item_Holder에 할당
+                d_Item_Data.Add(data.item_ID, item);
             }
         }
+    }
+
+    public bool Get_Item_Data(string item_Id, out Item_Scriptable item_Data)
+    {
+        return Item_Data.TryGetValue(item_Id, out item_Data);
     }
 }

@@ -4,10 +4,10 @@ using UnityEngine.U2D;
 public class Utils
 {
     public static SpriteAtlas atlas = Resources.Load<SpriteAtlas>("Item_Atlas");
-    public static Sprite Get_Atlas(string temp)
+    public static Sprite Get_Atlas(string id)
     {
         if (atlas == null) Debug.Log("¾øÀ½");
-        return atlas.GetSprite(temp);
+        return atlas.GetSprite(id);
     }
 }
 public static class AnimatorHash
