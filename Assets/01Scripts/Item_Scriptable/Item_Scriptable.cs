@@ -11,4 +11,7 @@ public class Item_Scriptable : ScriptableObject
     public int max_Stack;
 
     public Item_Type item_Type = Item_Type.None;
+
+    public virtual void Use(IDamageable target) { }
+ 
 }

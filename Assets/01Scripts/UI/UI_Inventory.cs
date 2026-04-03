@@ -132,61 +132,39 @@ public class UI_Inventory : UI_Base
     {
         Return_Prefab_Slot();
 
-        List<Item_Holder> items_To_Display = Get_Items_To_Display();
-
-        Create_Inventory_Slots(items_To_Display);
+        Create_Inventory_Slots();
         Create_Add_Button();
     }
-    private void Create_Inventory_Slots(List<Item_Holder> items_To_Display)
+   
+    private void Create_Inventory_Slots()
     {
-       Base_Manager.inventory_Mng.Get_Inventory_Size((int)current_Type, out int size);
+        var slots = Base_Manager.inventory_Mng.inventory_Data.Inventory_Slots[current_Type];
 
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < slots.Count; i++)
         {
             int index = i;
+
             Base_Manager.pool_Mng.Pooling_OBJ(UI_Pool_Key.INV_ITEM_SLOT).Get(obj =>
             {
-                Inventory_Item_Slot slot = obj.GetComponent<Inventory_Item_Slot>();
-                slot.transform.SetParent(slot_content, false);
-                garbage_Slot.Add(slot.gameObject);
-                slot.gameObject.SetActive(true);
+                Inventory_Item_Slot uiSlot = obj.GetComponent<Inventory_Item_Slot>();
+                uiSlot.transform.SetParent(slot_content, false);
+                garbage_Slot.Add(uiSlot.gameObject);
+                uiSlot.gameObject.SetActive(true);
 
-                if (index < items_To_Display.Count)
-                    slot.Init(items_To_Display[index], DES_Content);
+                var dataSlot = slots[index];
+
+                if (!dataSlot.IsEmpty)
+                {
+                    uiSlot.Init(dataSlot.item, dataSlot.quantity, DES_Content, index); 
+                }
                 else
-                    slot.Init(null);
+                {
+                    uiSlot.Init(null, 0, DES_Content, index);
+                }
             });
         }
     }
-
-    private List<Item_Holder> Get_Items_To_Display()
-    {
-        List<Item_Holder> items_To_Display = new List<Item_Holder>();
-        foreach (var item in Base_Manager.inventory_Mng.inventory_Data.Player_Items)
-        {
-            var item_Holder = item.Value;
-
-            if (item_Holder.holder.Quantity <= 0 || item_Holder.item_Data.item_Type != current_Type)
-                continue;
-
-            int remaining = item_Holder.holder.Quantity;
-            int max_Stack = item_Holder.item_Data.max_Stack;
-
-            while (remaining > 0)
-            {
-                int stack_Count = Mathf.Min(remaining, max_Stack);
-
-                items_To_Display.Add(new Item_Holder
-                {
-                    item_Data = item_Holder.item_Data,
-                    holder = new Holder { Quantity = stack_Count }
-                });
-
-                remaining -= stack_Count;
-            }
-        }
-        return items_To_Display;
-    }
+  
     private void Create_Add_Button()
     {
         Base_Manager.pool_Mng.Pooling_OBJ(UI_Pool_Key.INV_ADD_BUTTON).Get(obj =>
@@ -224,8 +202,44 @@ public class UI_Inventory : UI_Base
     public void Expand_Inventory()
     {
         int index = (int)current_Type;
-        Base_Manager.inventory_Mng.Inventory_Size[index]++;
-        Set_Inventory_Slot();
+      
+        var slots = Base_Manager.inventory_Mng.inventory_Data.Inventory_Slots[current_Type];
+        int defaut_Size = Base_Manager.inventory_Mng.inventory_Data.default_Slot_Size;
+        for (int i = 0; i < defaut_Size; i++) 
+        {
+            slots.Add(new Inventory_Slot());
+        }
+        Create_Additional_Slots(defaut_Size);
+    }
+    private void Create_Additional_Slots(int count)
+    {
+        var slots = Base_Manager.inventory_Mng.inventory_Data.Inventory_Slots[current_Type];
+        int startIndex = slots.Count - count;
+
+        for (int i = startIndex; i < slots.Count; i++)
+        {
+            int index = i;
+            Base_Manager.pool_Mng.Pooling_OBJ(UI_Pool_Key.INV_ITEM_SLOT).Get(obj =>
+            {
+                Inventory_Item_Slot ui_Slot = obj.GetComponent<Inventory_Item_Slot>();
+                ui_Slot.transform.SetParent(slot_content, false);
+                garbage_Slot.Add(ui_Slot.gameObject);
+                ui_Slot.gameObject.SetActive(true);
+
+                var data_Slot = slots[index];
+                if (!data_Slot.IsEmpty)
+                {
+                    ui_Slot.Init(data_Slot.item, data_Slot.quantity, DES_Content, index);
+                }
+                else
+                {
+                    ui_Slot.Init(null, 0, DES_Content, index);
+                }
+            });
+        }
+
+        if (garbage_Add_Button != null)
+            garbage_Add_Button.transform.SetAsLastSibling();
     }
     #endregion
 
@@ -236,6 +250,13 @@ public class UI_Inventory : UI_Base
         if (item.item_Data.item_Type == current_Type)
         {
             Debug.Log("½ÇÇàµÊ");
+            Set_Inventory_Slot();
+        }
+    }
+    private void OnItemChanged(Item_Scriptable item)
+    {
+        if (item.item_Type == current_Type)
+        {
             Set_Inventory_Slot();
         }
     }

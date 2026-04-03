@@ -45,21 +45,21 @@ public class Base_Manager : MonoBehaviour
         {
             pool_Mng.Pooling_OBJ("potion_health").Get(obj =>
             {
-                obj.GetComponent<Item_Base>().Init(new Vector3(2, 0.2f, 2), item_Data);
+                obj.GetComponent<Item_Base>().Init(new Vector3(2, 0.2f, 2), item_Data,3);
 
             });
             pool_Mng.Pooling_OBJ("potion_health").Get(obj =>
             {
-                obj.GetComponent<Item_Base>().Init(new Vector3(-2, 0.2f, 2), item_Data);
+                obj.GetComponent<Item_Base>().Init(new Vector3(-2, 0.2f, 2), item_Data,3);
             });
             pool_Mng.Pooling_OBJ("potion_health").Get(obj =>
             {
-                obj.GetComponent<Item_Base>().Init(new Vector3(4, 0.2f, 2), item_Data);
+                obj.GetComponent<Item_Base>().Init(new Vector3(4, 0.2f, 2), item_Data,3);
 
             });
             pool_Mng.Pooling_OBJ("potion_health").Get(obj =>
             {
-                obj.GetComponent<Item_Base>().Init(new Vector3(-4, 0.2f, 2), item_Data);
+                obj.GetComponent<Item_Base>().Init(new Vector3(-4, 0.2f, 5), item_Data, 1);
             });
            
         }
@@ -67,11 +67,19 @@ public class Base_Manager : MonoBehaviour
         {
             pool_Mng.Pooling_OBJ("potion_purple").Get(obj =>
             {
-                obj.GetComponent<Item_Base>().Init(new Vector3(-5, 0.2f, 2), item_Data2);
+                obj.GetComponent<Item_Base>().Init(new Vector3(-5, 0.2f, 2), item_Data2,3);
             });
             pool_Mng.Pooling_OBJ("potion_purple").Get(obj =>
             {
-                obj.GetComponent<Item_Base>().Init(new Vector3(5, 0.2f, 2), item_Data2);
+                obj.GetComponent<Item_Base>().Init(new Vector3(5, 0.2f, 2), item_Data2,3);
+            });
+            pool_Mng.Pooling_OBJ("potion_purple").Get(obj =>
+            {
+                obj.GetComponent<Item_Base>().Init(new Vector3(7, 0.2f, 2), item_Data2,3);
+            });
+            pool_Mng.Pooling_OBJ("potion_purple").Get(obj =>
+            {
+                obj.GetComponent<Item_Base>().Init(new Vector3(-7, 0.2f, 2), item_Data2,3);
             });
         }
        

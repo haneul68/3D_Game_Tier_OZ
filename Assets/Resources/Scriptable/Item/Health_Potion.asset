@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1672764bbb2ef8f4587c34a82b74ab53, type: 3}
-  m_Name: HP_Potion
+  m_Script: {fileID: 11500000, guid: 7de9e4ef862946c4ba91efa1260a660a, type: 3}
+  m_Name: Health_Potion
   m_EditorClassIdentifier: 
   item_ID: potion_health
   item_Name: HP_Potion
   item_Description: "\uCCB4\uB825\uC744 <color=#00FF00>{0}</color> \uB9CC\uD07C \uD68C\uBCF5\uD569\uB2C8\uB2E4."
   is_Pickup: 0
   item_Value: 20
-  max_Stack: 3
+  max_Stack: 2
   item_Type: 1

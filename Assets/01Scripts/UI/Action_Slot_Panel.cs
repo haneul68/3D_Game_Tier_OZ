@@ -8,12 +8,12 @@ public class Action_Slot_Panel : MonoBehaviour
 
     private Item_Scriptable current_Item;
 
-    //private Inventory_Item_Slot current_Slot;
+    private Inventory_Item_Slot current_Slot;
 
     public void Init(Item_Scriptable item, Inventory_Item_Slot slot)
     {
         current_Item = item;
-        //current_Slot = slot;
+        current_Slot = slot;
         Exit_Button.onClick.RemoveAllListeners();
         Exit_Button.onClick.AddListener(() =>
          {
@@ -29,22 +29,25 @@ public class Action_Slot_Panel : MonoBehaviour
 
     private void Use_in_Inventory_Item()
     {
-        Base_Manager.inventory_Mng.inventory_Data.Usable_Item[current_Item.item_ID].Use_Item(1); // 임시 사용 개수 지정 : 1개 
+        var inventory = Base_Manager.inventory_Mng.inventory_Data;
+        var slot = inventory.Inventory_Slots[current_Item.item_Type][current_Slot.Slot_Index];
 
-        if (!Base_Manager.inventory_Mng.inventory_Data.Has_Usable_Item(current_Item.item_ID))
+        bool success = inventory.Use_Slot(current_Item.item_Type, current_Slot.Slot_Index, 1);
+        if (!success)
         {
-            //current_Slot.Init(null);
+            Debug.Log("아이템 사용 실패");
+            return;
         }
+
+        current_Item.Use(Base_Manager.instance.current_Player);
+
+        if (slot.quantity > 0)
+            current_Slot.Init(slot.item, slot.quantity, null, current_Slot.Slot_Index);
         else
-        {
-            Item_Holder item = Base_Manager.inventory_Mng.inventory_Data.Player_Items[current_Item.item_ID];
-
-            //current_Slot.Init(item);
-        }
+            current_Slot.Init(null); 
 
         Close_Panel();
     }
-
     public void Close_Panel()
     {
         Base_Manager.pool_Mng.pool_Dictionary[UI_Pool_Key.ITEM_ACTION_PANEL].Return(this.gameObject);

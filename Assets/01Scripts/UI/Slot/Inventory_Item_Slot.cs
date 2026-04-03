@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
+    public int Slot_Index { get; private set; }
+
     [SerializeField] 
     private Image item_Image;
     [SerializeField] 
@@ -17,9 +19,10 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
     private GameObject Popup;
 
     public int item_stack = 0;
-
-    public void Init(Item_Holder item = null, Transform popup_Content = null) 
+    public void Init(Item_Scriptable item, int quantity = 0, Transform popup_Content = null, int slotIndex = -1)
     {
+        Slot_Index = slotIndex;
+
         if (item == null)
         {
             data = null;
@@ -28,22 +31,21 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
             return;
         }
 
-        if (popup_Content != null) 
-        {
+        if (popup_Content != null)
             content = popup_Content;
-        }
 
-        data = item.item_Data;
-        Holder holder = item.holder;
+        data = item;
+
         item_Image.gameObject.SetActive(true);
-        item_Image.sprite = Utils.Get_Atlas(data.item_ID);
+        item_Image.sprite = Utils.Get_Atlas(item.item_ID);
         item_Image.SetNativeSize();
+
         slot_Rect = item_Image.GetComponent<RectTransform>();
-        slot_Rect.sizeDelta = new Vector2(slot_Rect.sizeDelta.x/4, slot_Rect.sizeDelta.y / 4);
-        quantity_Text.text = holder.Quantity.ToString();
+        slot_Rect.sizeDelta = new Vector2(slot_Rect.sizeDelta.x / 4, slot_Rect.sizeDelta.y / 4);
 
+        quantity_Text.text = quantity.ToString();
     }
-
+  
     public void Reset_Data() 
     {
         data = null;
@@ -71,9 +73,10 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
 
         Base_Manager.pool_Mng.Pooling_OBJ(UI_Pool_Key.ITEM_ACTION_PANEL).Get(obj =>
         {
-            obj.GetComponent<Action_Slot_Panel>().Init(data,this);   
-            obj.transform.parent = content;
+            obj.GetComponent<Action_Slot_Panel>().Init(data,this);
+            obj.transform.SetParent(content, false);
             RectTransform rect = obj.GetComponent<RectTransform>();
+
             Vector2 pos = slot_Rect.position;
             pos.x = pos.x + 70f;
             rect.position = pos;
@@ -99,7 +102,7 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
         Base_Manager.pool_Mng.Pooling_OBJ(UI_Pool_Key.UI_DES_POPUP).Get(obj => 
         {
             obj.GetComponent<UI_Des_PopUp>().init(data);
-            obj.transform.parent = content;
+            obj.transform.SetParent(content, false);
             Popup = obj;
             RectTransform rect = obj.GetComponent<RectTransform>();
             Vector2 pos = slot_Rect.position;

@@ -7,50 +7,21 @@ public class World_Item : Item_Base
 
     private void OnTriggerEnter(Collider other)
     {
-       
-        if (other.TryGetComponent<Player>(out var player))
+        if (!other.TryGetComponent<Player>(out var player)) return;
+
+        if (!Base_Manager.inventory_Mng.inventory_Data.Can_Add_Item(item_Data, amount))
         {
-            
-            bool success = Base_Manager.inventory_Mng.inventory_Logic.Get_Item(item_Data, 1);
-
-            if (!success)
-            {
-                Debug.Log($"인벤토리 슬롯 부족: {item_Data.item_Name}");
-                return;
-            }
-
-            Base_Manager.pool_Mng.pool_Dictionary[item_Data.item_ID].Return(this.gameObject);
-
-            if (!Base_Manager.inventory_Mng.inventory_Data.Has_Usable_Item(item_Data.item_ID))
-            {
-                if (item_Data.item_Type == Item_Type.Consumable)
-                {
-                    Base_Manager.inventory_Mng.inventory_Data.Add_Usable_Item(item_Data.item_ID, this);
-                }
-            }
+            Debug.Log($"공간 부족: {item_Data.item_Name}");
+            return;
         }
-    }
-    public override void Use_Item(int value)
-    {
-        Check_Item_Type(Base_Manager.instance.current_Player);
-        base.Use_Item(value);
-        
-    }
-    private void Check_Item_Type(Player player)
-    {
-        switch (type)
+
+        bool success = Base_Manager.inventory_Mng.inventory_Logic.Get_Item(item_Data, amount);
+        if (!success)
         {
-            case World_Item_Type.Health:
-                player.Heal(item_Data.item_Value);
-                Base_Manager.pool_Mng.Pooling_OBJ("Heal_Effect").Get(effect =>
-                {
-                    Return_S re = effect.GetComponent<Return_S>();
-                    re.name = "Heal_Effect";
-                    re.Start_Return_Coroutine();
-                    effect.transform.SetParent(player.transform);
-                    effect.transform.position = player.transform.position;
-                });
-                break;
+            Debug.Log($"인벤토리 추가 실패: {item_Data.item_Name}");
+            return;
         }
+
+        Base_Manager.pool_Mng.pool_Dictionary[item_Data.item_ID].Return(this.gameObject);
     }
 }
