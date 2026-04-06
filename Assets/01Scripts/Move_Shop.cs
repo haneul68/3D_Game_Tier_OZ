@@ -13,7 +13,7 @@ public class Move_Shop : MonoBehaviour, IInteractable
     {
         if (string.IsNullOrEmpty(shop_Scene_Name))
         {
-            Debug.LogError("씬 이름이 설정되지 않았습니다!");
+            Debug.LogError("씬 이름이 설정x");
             return;
         }
         Scene_Data.spawn_Point_Name = Spwan_Point_Name;
