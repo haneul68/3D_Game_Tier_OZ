@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Base_Canvas : MonoBehaviour
 {
-    private static Base_Canvas instance;
+    public static Base_Canvas instance;
 
     [SerializeField]
     private Transform[] Layers;
@@ -28,6 +28,10 @@ public class Base_Canvas : MonoBehaviour
         {
             Base_Manager.ui_Mng.Get_UI("UI_Inventory", 2);
         }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            Base_Manager.ui_Mng.Get_UI("UI_Shop", 2);
+        }
     }
 
     public void Set_Layer(UI_Base ui, int index) 
@@ -42,5 +46,16 @@ public class Base_Canvas : MonoBehaviour
             return;
         }
         ui.transform.SetParent(Layers[index], false);
+    }
+
+    public void Get_Text_Pop_Up(string temp, Color color)
+    {
+        UI_Text_Pop_Up pop_Up = null;
+        Base_Manager.pool_Mng.Pooling_OBJ("Text_Pop_Up").Get(obj => 
+        {
+            pop_Up = obj.GetComponent<UI_Text_Pop_Up>();
+            pop_Up.Initalize(temp, color);
+            pop_Up.transform.SetParent(this.transform, false);
+        });
     }
 }

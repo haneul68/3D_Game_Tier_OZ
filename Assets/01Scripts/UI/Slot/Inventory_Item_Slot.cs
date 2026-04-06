@@ -19,7 +19,10 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
     private GameObject Popup;
 
     public int item_stack = 0;
-    public void Init(Item_Scriptable item, int quantity = 0, Transform popup_Content = null, int slotIndex = -1)
+
+    Item_Slot_Type item_Slot_Type;
+
+    public void Init(Item_Scriptable item, int quantity = 0, Transform popup_Content = null, int slotIndex = -1, Item_Slot_Type item_Slot_Type = Item_Slot_Type.None)
     {
         Slot_Index = slotIndex;
 
@@ -35,6 +38,8 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
             content = popup_Content;
 
         data = item;
+
+        this.item_Slot_Type = item_Slot_Type;
 
         item_Image.gameObject.SetActive(true);
         item_Image.sprite = Utils.Get_Atlas(item.item_ID);
@@ -59,6 +64,8 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
             return;
         }
 
+        if (item_Slot_Type == Item_Slot_Type.Shop_Inventory) return;
+
         if (Popup != null)
         {
             Base_Manager.pool_Mng.pool_Dictionary[UI_Pool_Key.UI_DES_POPUP].Return(Popup);
@@ -67,13 +74,13 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
 
         if (Base_Manager.inventory_Mng.Acrtion_Panal_Holder.Count > 0)
         {
-            Debug.Log("액션 팝업 활성화 중");
-            return;
+            Base_Manager.inventory_Mng.Acrtion_Panal_Holder.Pop().GetComponent<Action_Slot_Panel>().Close_Panel();
+            Debug.Log($"기존 액션 팝업 종료{Base_Manager.inventory_Mng.Acrtion_Panal_Holder.Count}");
         }
 
         Base_Manager.pool_Mng.Pooling_OBJ(UI_Pool_Key.ITEM_ACTION_PANEL).Get(obj =>
         {
-            obj.GetComponent<Action_Slot_Panel>().Init(data,this);
+            obj.GetComponent<Action_Slot_Panel>().Init(data, this);
             obj.transform.SetParent(content, false);
             RectTransform rect = obj.GetComponent<RectTransform>();
 
@@ -99,7 +106,7 @@ public class Inventory_Item_Slot : MonoBehaviour, IPointerEnterHandler, IPointer
             return;
         }
 
-        Base_Manager.pool_Mng.Pooling_OBJ(UI_Pool_Key.UI_DES_POPUP).Get(obj => 
+        Base_Manager.pool_Mng.Pooling_OBJ(UI_Pool_Key.UI_DES_POPUP).Get(obj =>
         {
             obj.GetComponent<UI_Des_PopUp>().init(data);
             obj.transform.SetParent(content, false);

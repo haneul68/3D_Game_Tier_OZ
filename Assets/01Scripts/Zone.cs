@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Zone : MonoBehaviour
@@ -15,6 +14,8 @@ public class Zone : MonoBehaviour
 
     private Coroutine coroutine;
 
+    private Camera_Mode previousMode;
+
     private void OnTriggerEnter(Collider other)
     {
         IDamageable idamageable = other.GetComponent<IDamageable>();
@@ -29,12 +30,7 @@ public class Zone : MonoBehaviour
     {
         if (other.GetComponent<IDamageable>() == target)
         {
-            if (coroutine != null)
-            {
-                StopCoroutine(coroutine);
-                coroutine = null;
-            }
-            target = null;
+            Stop_Zone_Effect();
         }
     }
 
@@ -50,6 +46,29 @@ public class Zone : MonoBehaviour
         {
             case Zone_Type.Heal:
                 coroutine = StartCoroutine(Start_Heal_Coroutine());
+                break;
+            case Zone_Type.FPS_Zone:
+                previousMode = Base_Manager.game_Mng.current_Mode;
+                Base_Manager.game_Mng.current_Mode = Camera_Mode.FPS;
+                Base_Manager.game_Mng.is_Camera_Mode_Locked = true;
+                break;
+        }
+    }
+
+    private void Stop_Zone_Effect()
+    {
+        if (coroutine != null)
+        {
+            StopCoroutine(coroutine);
+            coroutine = null;
+        }
+        switch (zone_Type)
+        {
+            case Zone_Type.Heal:
+                break;
+            case Zone_Type.FPS_Zone:
+                Base_Manager.game_Mng.is_Camera_Mode_Locked = false;
+                Base_Manager.game_Mng.Restore_Mode_From_UI();
                 break;
         }
     }

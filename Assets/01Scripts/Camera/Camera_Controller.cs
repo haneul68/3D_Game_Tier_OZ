@@ -49,6 +49,8 @@ public class Camera_Controller : MonoBehaviour
 
     private void Change_Mode()
     {
+        if (Base_Manager.game_Mng.is_Camera_Mode_Locked == true) return;
+
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
         if (Base_Manager.game_Mng.current_Mode == Camera_Mode.TPS && scroll > 0f)
@@ -106,6 +108,7 @@ public class Camera_Controller : MonoBehaviour
 
     private void Set_TPS_Camera()
     {
+       
         float mouse_X = Input.GetAxis("Mouse X") * mouse_Sensitivity * Time.deltaTime;
         float mouse_Y = Input.GetAxis("Mouse Y") * mouse_Sensitivity * Time.deltaTime;
 

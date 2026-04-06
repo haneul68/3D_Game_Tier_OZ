@@ -14,6 +14,9 @@ public class UI_Inventory : UI_Base
     private Transform slot_content;
     [SerializeField]
     private readonly int default_Slot_Row = 11; 
+
+    [SerializeField]  
+    private Item_Slot_Type Inventory_Item_Slot_Type = Item_Slot_Type.None;
     #endregion
 
     [SerializeField]
@@ -70,7 +73,7 @@ public class UI_Inventory : UI_Base
             item_Type_Buttons[i].onClick.AddListener(() => Set_Item_Button_Type((Item_Type)index));
         }
     }
-    private void Set_Item_Button_Type(Item_Type type)
+    public void Set_Item_Button_Type(Item_Type type)
     {
         if (current_Type == type)
         {
@@ -155,11 +158,11 @@ public class UI_Inventory : UI_Base
 
                 if (!dataSlot.IsEmpty)
                 {
-                    uiSlot.Init(dataSlot.item, dataSlot.quantity, DES_Content, index); 
+                    uiSlot.Init(dataSlot.item, dataSlot.quantity, DES_Content, index, Inventory_Item_Slot_Type); 
                 }
                 else
                 {
-                    uiSlot.Init(null, 0, DES_Content, index);
+                    uiSlot.Init(null, 0, DES_Content, index, Inventory_Item_Slot_Type);
                 }
             });
         }
@@ -229,11 +232,11 @@ public class UI_Inventory : UI_Base
                 var data_Slot = slots[index];
                 if (!data_Slot.IsEmpty)
                 {
-                    ui_Slot.Init(data_Slot.item, data_Slot.quantity, DES_Content, index);
+                    ui_Slot.Init(data_Slot.item, data_Slot.quantity, DES_Content, index, Inventory_Item_Slot_Type);
                 }
                 else
                 {
-                    ui_Slot.Init(null, 0, DES_Content, index);
+                    ui_Slot.Init(null, 0, DES_Content, index, Inventory_Item_Slot_Type);
                 }
             });
         }
@@ -244,15 +247,7 @@ public class UI_Inventory : UI_Base
     #endregion
 
     #region On_Event
-    private void OnItemChanged(Item_Holder item)
-    {
-        Debug.Log(item.item_Data.name);
-        if (item.item_Data.item_Type == current_Type)
-        {
-            Debug.Log("½ÇÇàµÊ");
-            Set_Inventory_Slot();
-        }
-    }
+
     private void OnItemChanged(Item_Scriptable item)
     {
         if (item.item_Type == current_Type)
@@ -270,13 +265,17 @@ public class UI_Inventory : UI_Base
             obj.GetComponent<Action_Slot_Panel>().Close_Panel();
         }
     }
-
-    #region Override
-    public override void Close_UI()
+    public void Reset_UI()
     {
         current_Type = Item_Type.None;
         Close_PopUp();
         Return_Prefab_Slot();
+    }
+
+    #region Override
+    public override void Close_UI()
+    {
+        Reset_UI();
         base.Close_UI();
     }
     #endregion

@@ -4647,6 +4647,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot_content: {fileID: 6926700230464668644}
+  Inventory_Item_Slot_Type: 2
   DES_Content: {fileID: 5696158828661708772}
   item_Type_Buttons:
   - {fileID: 6252317427634310700}

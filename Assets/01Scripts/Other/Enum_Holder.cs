@@ -52,7 +52,8 @@ public enum Totem_Type
 public enum Zone_Type
 {
     Heal,
-    Damage
+    Damage,
+    FPS_Zone
 }
 
 public enum World_Item_Type
@@ -62,7 +63,10 @@ public enum World_Item_Type
     Mana
 }
 
-public enum UI_Type 
+public enum Item_Slot_Type 
 {
-
+    None,
+    Shop,
+    Inventory,
+    Shop_Inventory
 }

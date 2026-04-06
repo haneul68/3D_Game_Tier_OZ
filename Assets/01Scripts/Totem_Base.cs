@@ -16,13 +16,14 @@ public class Totem_Base : MonoBehaviour
     private GameObject totem_Effect;
     [SerializeField]
     private GameObject check_Player_Effect;
-
+    Player_Interaction player_Interaction;
     public bool is_On = false;
 
-    protected virtual void Start_Effect() 
+    protected virtual void Start_Effect(Player_Interaction interactable = null) 
     {
         is_On = true;   
         float value = start_Effect.GetComponent<ParticleSystem>().duration;
+        player_Interaction = interactable;  
         if (coroutine != null) 
         {
             StopCoroutine(coroutine);
@@ -48,6 +49,10 @@ public class Totem_Base : MonoBehaviour
         start_Effect.SetActive(false);
         totem_Effect.SetActive(false);
         check_Player_Effect.SetActive(false);
+        if (player_Interaction != null) 
+        {
+            player_Interaction.End_Current_Interactable();
+        }
     }
 
     public void On_Check_Player_Effect(bool isCan)

@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Action_Slot_Panel : MonoBehaviour
+public class Action_Slot_Panel : MonoBehaviour, IPointerExitHandler
 {
     [SerializeField]
     private Button use_Button, equip_Button, Exit_Button;
@@ -42,9 +43,9 @@ public class Action_Slot_Panel : MonoBehaviour
         current_Item.Use(Base_Manager.instance.current_Player);
 
         if (slot.quantity > 0)
-            current_Slot.Init(slot.item, slot.quantity, null, current_Slot.Slot_Index);
+            current_Slot.Init(slot.item, slot.quantity, null, current_Slot.Slot_Index, Item_Slot_Type.Inventory);
         else
-            current_Slot.Init(null); 
+            current_Slot.Init(null, 0, null, -1, Item_Slot_Type.Inventory); 
 
         Close_Panel();
     }
@@ -53,5 +54,10 @@ public class Action_Slot_Panel : MonoBehaviour
         Base_Manager.pool_Mng.pool_Dictionary[UI_Pool_Key.ITEM_ACTION_PANEL].Return(this.gameObject);
         Base_Manager.inventory_Mng.Acrtion_Panal_Holder.Clear();
         current_Item = null;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Close_Panel();
     }
 }

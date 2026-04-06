@@ -8,11 +8,13 @@ public class Base_Manager : MonoBehaviour
     private static UI_Manager ui_Manager = new UI_Manager();
     private static Data_Manager data_Manager = new Data_Manager();
     private static Inventory_Manager inventory_Manager = new Inventory_Manager();
+    private static Shop_Manager shop_Manager = new Shop_Manager();
     public static Game_Manager game_Mng { get { return game_Manager; } }
     public static Pool_Manager pool_Mng { get { return pool_Manager; } }
     public static UI_Manager ui_Mng { get { return ui_Manager; } }
     public static Data_Manager data_Mng { get { return data_Manager; } }
     public static Inventory_Manager inventory_Mng { get {return inventory_Manager; } }
+    public static Shop_Manager shop_Mng { get { return shop_Manager; } }
 
     [SerializeField]
     private Base_Canvas base_Canvas;

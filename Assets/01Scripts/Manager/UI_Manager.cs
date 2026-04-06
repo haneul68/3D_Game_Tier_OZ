@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,11 +16,11 @@ public class UI_Manager
         base_Canvas = _base_Canvas;
     }
 
-    public void Get_UI(string path, int layer_Index)
+    public UI_Base Get_UI(string path, int layer_Index)
     {
-        if (string.IsNullOrEmpty(path)) return;
+        if (string.IsNullOrEmpty(path)) return null;
 
-        if (ui_Holder.Count > 0 && ui_Holder.Peek().name == path) return;
+        if (ui_Holder.Count > 0 && ui_Holder.Peek().name == path) return null;
 
         UI_Base ui;
 
@@ -45,6 +46,8 @@ public class UI_Manager
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
+
+        return ui;
     }
 
     public void Close_Top_UI()

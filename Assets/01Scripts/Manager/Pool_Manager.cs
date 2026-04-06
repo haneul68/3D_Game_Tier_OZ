@@ -32,7 +32,7 @@ public class Object_Pool : IPool
         pool.Enqueue(obj);
         obj.transform.parent = parent_Transform;
         obj.SetActive(false);
-
+        obj.transform.position = Vector3.zero;
         action?.Invoke(obj);    
     }
 }

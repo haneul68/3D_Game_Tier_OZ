@@ -1,4 +1,3 @@
-using NUnit.Framework.Interfaces;
 using UnityEngine;
 
 public class Player_Interaction : MonoBehaviour
@@ -16,16 +15,25 @@ public class Player_Interaction : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F)) 
         {
-            if (current_Interactable != null)
+            if(current_Interactable != null) 
             {
-                current_Interactable.Interact(this);
-                current_Interactable = null;
-            }
-            else
-            {
-                return;
+                if (current_Interactable.Is_Interactable == false)
+                {
+                    current_Interactable.Interact(this);
+                    current_Interactable.Is_Interactable = true;
+                }
+                else
+                {
+                    return;
+                }
             }
         }
+    }
+
+    public void End_Current_Interactable() 
+    {
+        if(current_Interactable != null)
+            current_Interactable.Is_Interactable = false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -50,6 +58,7 @@ public class Player_Interaction : MonoBehaviour
 
         if (interactable != null && current_Interactable == interactable)
         {
+            current_Interactable.Is_Interactable = false;
             current_Interactable = null;
             if (interactable is Totem_Base totem)
             {
